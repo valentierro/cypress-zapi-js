@@ -1,6 +1,6 @@
 {
-  "name": "cypress-zapi",
-  "version": "1.0.0",
+  "name": "cypress-zapi-js",
+  "version": "1.0.1",
   "description": "Lib for connection between Cypress and Zephyr, enabling execution update via API",
   "main": "index.js",
   "scripts": {

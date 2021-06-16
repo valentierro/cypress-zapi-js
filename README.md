@@ -3,20 +3,20 @@
 <img alt="npm" src="https://img.shields.io/badge/Zephyr Squad-blue"> <img alt="npm" src="https://img.shields.io/badge/Languages-Javascript-yellow"> <img alt="npm" src="https://img.shields.io/badge/-NodeJs-green">
 <img alt="npm" src="https://img.shields.io/badge/Cypress-Ready!-green">
 
-# cypress-base-js
+# cypress-zapi-js
 Lib for connection between Cypress and Zephyr, enabling execution update via API.
 
 ## Pre-requisites:
 
 To work properly will be necessary to create/update some files: the files `cypress.json`, `cypress.env.json` and `cypress/plugins/index.js`
 
-- Update the file cypress/plugins/index.js adding:
+- Update the file `cypress/plugins/index.js` adding:
 ```
   const path = require("path");
   
   on("task", {
     getPackagePath() {
-      return path.dirname(require.resolve("../../", "package.json"));
+      return path.dirname(require.resolve("cypress-zapi-js/package.json"));
     },
   });
 
@@ -25,7 +25,7 @@ To work properly will be necessary to create/update some files: the files `cypre
 - Add the environment variables bellow on your `cypress.json` or `cypress.env.json`:
 ```
   "cypress-zapi": {
-  "updateJira": true, // false = after test execution will not update the Jira | true = after test execution will update the Jira
+  "updateJira": true, <!-- // false = after test execution will not update the Jira | true = after test execution will update the Jira -->
   "uploadAttachOnFailure":true, // false = If test fail will not upload evidence (cypress screenshot) | true = If test fail will upload evidence (cypress screenshot)
   "baseUrl": "https://prod-api.zephyr4jiracloud.com/connect", // Zephyr Api base url
   "accessKey": "NzY0NWQyNWMtxxxxxxxxxxxxxxxxxxxxxxxxxxxmMzQyNTYyMzIzNjA3MDAzODU0MGYyMyBjeXByZXNzMQ", // User access key. See: https://cucumberforjira.atlassian.net/wiki/spaces/C4JD/pages/13139969/How+to+automatically+push+Cucumber+test+results+into+a+Zephyr+test+cycle
@@ -99,6 +99,11 @@ after(() => {});
 
 ```
 
+- Finnaly update your file `cypress/support/index.js` adding:
+```
+import './zephyr-base';
+
+```
 
 ## How to implement the tests:
 

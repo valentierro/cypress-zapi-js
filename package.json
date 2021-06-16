@@ -1,13 +1,13 @@
 {
   "name": "cypress-zapi-js",
-  "version": "1.0.1",
+  "version": "1.0.6",
   "description": "Lib for connection between Cypress and Zephyr, enabling execution update via API",
   "main": "index.js",
   "scripts": {
     "test:chrome": "cypress run --browser chrome --no-exit"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["cypress","zephyr","jira"],
+  "author": "Erick Valentin",
   "license": "ISC",
   "dependencies": {
     "form-data": "^4.0.0",
@@ -21,6 +21,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/valentierro/cypress-zapi.git"
+    "url": "git+https://github.com/valentierro/cypress-zapi-js"
   }
 }

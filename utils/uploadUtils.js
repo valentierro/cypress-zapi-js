@@ -14,13 +14,11 @@ function generateClient(baseUrl, accessKey, secretKey, accountId) {
 
 function getFiles(path, testName) {
   let files = [""];
+  files.shift();
+  let filteredFiles;
   try {
     files = recursiveReadSync(path);
-    for (let i = 0; i < files.length; i++) {
-      if (!files[i].includes(testName)) {
-        files.splice(i, 1);
-      }
-    }
+    filteredFiles = files.filter(function(e) { return e.includes(testName) })
   } catch (err) {
     if (err.errno === 34) {
       console.log("Path does not exist");
@@ -28,7 +26,7 @@ function getFiles(path, testName) {
       throw err;
     }
   }
-  return files;
+  return filteredFiles;
 }
 module.exports.evidencesUpload = async function (
   accessKey,

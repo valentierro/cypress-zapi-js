@@ -47,57 +47,68 @@ To work properly will be necessary to create/update some files: the files `cypre
 ```
 const ZAPI = require("cypress-zapi-js");
 
+before(() => {});
+
 beforeEach(() => {});
 
 afterEach(() => {
   Cypress.on("uncaught:exception", (err) => {
     throw err;
   });
+
   if (Cypress.env("cypress-zapi").updateJira) {
     cy.log("Update Jira Enabled");
-    const testResult = Cypress.mocha.getRunner().suite.ctx.currentTest.state;
-    let intTestResult = "0";
-    const titleString = Cypress.mocha.getRunner().suite.ctx.currentTest.title;
-    const issueKey = titleString.substr(0, titleString.indexOf(",")).trim();
-    switch (testResult) {
-      case "passed":
-        intTestResult = "1";
-        break;
-      case "failed":
-        intTestResult = "2";
-        break;
-      default:
-        intTestResult = "-1";
-    }
-    try {
-      ZAPI.createExecution(
-        Cypress.env("cypress-zapi").baseUrl,
-        Cypress.env("cypress-zapi").accessKey,
-        Cypress.env("cypress-zapi").secretKey,
-        Cypress.env("cypress-zapi").accountId,
-        Cypress.env("cypress-zapi").projectId,
-        Cypress.env("cypress-zapi").versionId,
-        issueKey,
-        Cypress.env("cypress-zapi").cycles.currentCycle,
-        intTestResult,
-        Cypress.env("cypress-zapi").uploadAttachOnFailure,
-        Cypress.env("cypress-zapi").cycles.copyTestsFromOtherCycle,
-        Cypress.env("cypress-zapi").cycles.copyFromCycle,
-        Cypress.env("cypress-zapi").cycles.copyFromVersionId
-      );
-    } catch (error) {
-      console.error(`Error to update the status on Jira: ${error}`);
-    }
+    cy.task("getPackagePath").then((packagePath) => {
+      const testResult = Cypress.mocha.getRunner().suite.ctx.currentTest.state;
+      let intTestResult = "0";
+      const titleString = Cypress.mocha.getRunner().suite.ctx.currentTest.title;
+      const issueKey = titleString.substr(0, titleString.indexOf(",")).trim();
+      switch (testResult) {
+        case "passed":
+          intTestResult = "1";
+          break;
+        case "failed":
+          intTestResult = "2";
+          break;
+        default:
+          intTestResult = "-1";
+      }
+      try {
+        ZAPI.createExecution(
+          Cypress.env("cypress-zapi").baseUrl,
+          Cypress.env("cypress-zapi").accessKey,
+          Cypress.env("cypress-zapi").secretKey,
+          Cypress.env("cypress-zapi").accountId,
+          Cypress.env("cypress-zapi").projectId,
+          Cypress.env("cypress-zapi").versionId,
+          issueKey,
+          Cypress.env("cypress-zapi").cycles.currentCycle,
+          intTestResult,
+          Cypress.env("cypress-zapi").uploadAttachOnFailure,
+          Cypress.env("cypress-zapi").cycles.copyTestsFromOtherCycle,
+          Cypress.env("cypress-zapi").cycles.copyFromCycle,
+          Cypress.env("cypress-zapi").cycles.copyFromVersionId,
+          packagePath
+        );
+      } catch (error) {
+        console.error(`Error to update the status on Jira: ${error}`);
+      }
+    });
   } else {
     cy.log("Update Jira Disabled");
   }
 });
 
-before(() => {});
-
 after(() => {});
 
 ```
+
+- Add this config to your `cypress.json`:
+```
+"trashAssetsBeforeRuns":true
+
+```
+Note: The config above will clean the cypress screenshot folder after run the scenarios.
 
 - Finnaly update your file `cypress/support/index.js` adding:
 ```

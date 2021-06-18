@@ -33,8 +33,11 @@ module.exports = {
     uploadAttachOnFailure,
     copyTestsFromOtherCycle,
     copyFromCycle,
-    copyFromVersionId
+    copyFromVersionId,
+    packagePath
+
   ) {
+    cy.log("Starting updating Jira...")
     const setupData = [""];
     setupData.push(baseUrl, accessKey, secretKey, accountId);
     /// //////////////////////// Get Current and Target CycleId ///////////////////////////
@@ -200,7 +203,6 @@ module.exports = {
                         if (testResult === "2") {
                           if (uploadAttachOnFailure) {
                             try {
-                              cy.task("getPackagePath").then((packagePath) => {
                                 cy.exec(
                                   `node ${packagePath}${path.sep}utils${
                                     path.sep
@@ -212,7 +214,6 @@ module.exports = {
                                     projectId
                                   )} ${issueKey}`
                                 );
-                              });
                             } catch (error) {
                               console.error(
                                 `Error to upload the attachments: ${error}`
@@ -230,5 +231,6 @@ module.exports = {
         }
       });
     });
+    cy.log("Jira Updated.")
   },
 };
